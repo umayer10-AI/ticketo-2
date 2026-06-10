@@ -4,7 +4,7 @@ import React from 'react';
 
 const layout = ({children}) => {
 
-    const role = 'attendee'
+    const role = 'organizer'
     let sideBar;
     if(role==='organizer'){
         sideBar = <OrganizerSidebar></OrganizerSidebar>
