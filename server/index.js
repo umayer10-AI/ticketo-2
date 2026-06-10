@@ -24,17 +24,33 @@ app.get('/', (req, res) => {
 
 const run = async () => {
     try {
-        await client.connect();
+        // await client.connect();
 
         const db = client.db('ticketoAuth')
         const userCollection = db.collection('allData')
+        const organizaionCollection = db.collection('organizaion')
+        const organizaionCollection = db.collection('organizaion')
+        const eventsCollection = db.collection('events')
+        const bookingCollection = db.collection('booking')
+        const paymentsCollection = db.collection('payments')
 
         app.get('/user', async (req,res) => {
             const result = await userCollection.find().toArray()
             res.send(result)
         })
 
-        await client.db("admin").command({ ping: 1 });
+        app.post(('/api/organizaion', async (req,res) => {
+          const m = req.body
+          const newData = {
+            ...m,
+            createdAt: new Date(),
+            status: 'active'
+          }
+          const result = await organizaionCollection.insertOne(newData)
+          res.send(result)
+        }))
+
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } 
     finally {
