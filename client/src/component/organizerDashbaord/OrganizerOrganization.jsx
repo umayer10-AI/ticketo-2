@@ -11,11 +11,40 @@ export default function OrganizerOrganization() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+  try {
+    const image = data.logo[0];
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    const imageUploadRes = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const imageResult = await imageUploadRes.json();
+
+    const organizationData = {
+      name: data.name,
+      email: data.email,
+      website: data.website,
+      address: data.address,
+      description: data.description,
+      logo: imageResult.data.display_url,
+    };
+
+    console.log(organizationData);
+
+    // await axios.post("/organization", organizationData)
 
     reset();
-  };
-
+  } catch (error) {
+    console.log(error);
+  }
+};
   return (
     <div className="max-w-4xl mx-auto rounded-3xl border border-white/10 bg-black p-8">
       {/* Header */}
@@ -86,23 +115,25 @@ export default function OrganizerOrganization() {
 
           {/* Logo URL */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-300">
-              Logo URL
-            </label>
-            <input
-              type="url"
-              placeholder="https://example.com/logo.png"
-              {...register("logo", {
-                required: "Logo URL is required",
-              })}
-              className="w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-cyan-500"
-            />
-            {errors.logo && (
-              <p className="mt-1 text-sm text-red-400">
-                {errors.logo.message}
-              </p>
-            )}
-          </div>
+  <label className="mb-2 block text-sm font-medium text-gray-300">
+    Organization Logo
+  </label>
+
+  <input
+    type="file"
+    accept="image/*"
+    {...register("logo", {
+      required: "Logo is required",
+    })}
+    className="w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-cyan-500"
+  />
+
+  {errors.logo && (
+    <p className="mt-1 text-sm text-red-400">
+      {errors.logo.message}
+    </p>
+  )}
+</div>
 
           {/* Address */}
           <div className="md:col-span-2">
