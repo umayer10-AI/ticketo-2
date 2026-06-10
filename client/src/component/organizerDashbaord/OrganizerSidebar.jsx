@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Building2,
@@ -12,34 +12,40 @@ import {
   LogOut,
   Ticket,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const menuItems = [
   {
     title: "Overview",
-    href: "/dashboard",
+    href: "/dashboard/organizer",
     icon: LayoutDashboard,
   },
   {
     title: "Organization",
-    href: "/dashboard/organization",
+    href: "/dashboard/organizer/organization",
     icon: Building2,
   },
   {
     title: "Add Event",
-    href: "/dashboard/add-event",
+    href: "/dashboard/organizer/add-event",
     icon: CalendarPlus,
   },
   {
     title: "Manage Event",
-    href: "/dashboard/manage-event",
+    href: "/dashboard/organizer/manage-event",
     icon: CalendarDays,
   },
   {
     title: "Attendees",
-    href: "/dashboard/attendees",
+    href: "/dashboard/organizer/attendees",
     icon: Users,
   },
 ];
+
+  const a = async() => {
+    await authClient.signOut()
+    redirect('/')
+  }
 
 export default function OrganizerSidebar() {
   const pathname = usePathname();
@@ -66,9 +72,9 @@ export default function OrganizerSidebar() {
             const Icon = item.icon;
 
             const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" &&
-                pathname.startsWith(item.href));
+              item.href === "/dashboard/organizer"
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
 
             return (
               <Link
@@ -98,7 +104,7 @@ export default function OrganizerSidebar() {
           <span>Back to Home</span>
         </Link>
 
-        <button
+        <button onClick={a}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition"
         >
           <LogOut size={20} />

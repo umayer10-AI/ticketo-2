@@ -13,6 +13,14 @@ const Navbar = () => {
   const user = session?.user
   console.log(user)
 
+  let dash;
+  if(user?.role==='organizer'){
+    dash = '/dashboard/organizer'
+  }
+  if(user?.role==='attendee'){
+    dash = '/dashboard/attendee'
+  }
+
   const a = async() => {
     await authClient.signOut()
   }
@@ -92,7 +100,7 @@ const Navbar = () => {
               {isOpen && (
                 <div className="absolute right-0 mt-3 w-52 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden">
                   <Link
-                    href="/dashboard"
+                    href={dash}
                     className="block px-5 py-3 text-gray-300 hover:bg-zinc-800 hover:text-cyan-400 transition"
                   >
                     Dashboard

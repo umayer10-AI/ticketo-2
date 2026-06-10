@@ -1,43 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Building2,
   CalendarPlus,
-  CalendarDays,
-  Users,
   Home,
   LogOut,
   Ticket,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const menuItems = [
   {
     title: "Overview",
-    href: "/dashboard",
+    href: "/dashboard/attendee",
     icon: LayoutDashboard,
   },
   {
     title: "Tickets",
-    href: "/dashboard/tickets",
+    href: "/dashboard/attendee/ticket",
     icon: Building2,
   },
   {
     title: "Payments",
-    href: "/dashboard/payments",
+    href: "/dashboard/attendee/payment",
     icon: CalendarPlus,
   },
-
 ];
+
+  const a = async() => {
+    await authClient.signOut()
+    redirect('/')
+  }
 
 export default function AttendeeSidebar() {
   const pathname = usePathname();
 
   return (
     <aside className="w-72 min-h-screen bg-black border-r border-white/10 flex flex-col justify-between p-6">
-      
       {/* Top Section */}
       <div>
         {/* Logo */}
@@ -57,9 +59,9 @@ export default function AttendeeSidebar() {
             const Icon = item.icon;
 
             const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" &&
-                pathname.startsWith(item.href));
+              item.href === "/dashboard/attendee"
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
 
             return (
               <Link
@@ -89,9 +91,7 @@ export default function AttendeeSidebar() {
           <span>Back to Home</span>
         </Link>
 
-        <button
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition"
-        >
+        <button onClick={a} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition">
           <LogOut size={20} />
           <span>Sign Out</span>
         </button>
