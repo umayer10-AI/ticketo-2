@@ -1,8 +1,17 @@
 "use client";
 
+import { addOrganization } from "@/lib/api/action";
+import { ClientSession } from "@/lib/api/client";
+import { authClient } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function OrganizerOrganization() {
+
+    const { data: session } = authClient.useSession()
+    const user = session?.user
+    console.log(user)
+
   const {
     register,
     handleSubmit,
@@ -28,8 +37,8 @@ export default function OrganizerOrganization() {
     const imageResult = await imageUploadRes.json();
 
     const organizationData = {
-      name: data.name,
-      email: data.email,
+      name: user?.name,
+      email: user?.email,
       website: data.website,
       address: data.address,
       description: data.description,
@@ -38,7 +47,18 @@ export default function OrganizerOrganization() {
 
     console.log(organizationData);
 
-    // await axios.post("/organization", organizationData)
+    const d = await addOrganization(organizationData)
+    if(d){
+        toast.success('Successfully',
+            {
+                style: {
+                borderRadius: '10px',
+                background: '#333',
+                color: '#fff',
+                },
+            }
+        )
+    }
 
     reset();
   } catch (error) {
@@ -71,6 +91,7 @@ export default function OrganizerOrganization() {
               {...register("name", {
                 required: "Organization name is required",
               })}
+              value={user?.name || 'Umayer Ahmad'}
               className="w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-white outline-none focus:border-cyan-500"
             />
             {errors.name && (
@@ -87,6 +108,7 @@ export default function OrganizerOrganization() {
             </label>
             <input
               type="email"
+              value={user?.email? user?.email : 'jhondoe22@gmail.com'}
               placeholder="contact@ticketo.com"
               {...register("email", {
                 required: "Email is required",

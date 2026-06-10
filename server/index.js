@@ -29,7 +29,6 @@ const run = async () => {
         const db = client.db('ticketoAuth')
         const userCollection = db.collection('allData')
         const organizaionCollection = db.collection('organizaion')
-        const organizaionCollection = db.collection('organizaion')
         const eventsCollection = db.collection('events')
         const bookingCollection = db.collection('booking')
         const paymentsCollection = db.collection('payments')
@@ -39,7 +38,7 @@ const run = async () => {
             res.send(result)
         })
 
-        app.post(('/api/organizaion', async (req,res) => {
+        app.post('/api/organizaion', async (req,res) => {
           const m = req.body
           const newData = {
             ...m,
@@ -48,7 +47,7 @@ const run = async () => {
           }
           const result = await organizaionCollection.insertOne(newData)
           res.send(result)
-        }))
+        })
 
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
