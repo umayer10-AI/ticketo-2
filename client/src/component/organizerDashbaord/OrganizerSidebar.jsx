@@ -61,7 +61,7 @@ export default function OrganizerSidebar() {
             <Ticket size={20} className="text-white" />
           </div>
 
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-700 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
             Ticketo
           </h2>
         </div>
