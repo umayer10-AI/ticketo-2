@@ -77,7 +77,8 @@ const Navbar = () => {
             }
 
             {/* Profile Dropdown */}
-            <div className="relative">
+            {
+              user && <div className="relative">
               <div
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 cursor-pointer hover:border-cyan-500/50 transition"
@@ -112,6 +113,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            }
 
           </div>
         </div>
