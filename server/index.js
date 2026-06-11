@@ -98,6 +98,29 @@ const run = async () => {
           }
           const result = await eventsCollection.find(query).toArray()
           res.json(result || {})
+          // console.log(result)
+        })
+
+        app.patch('/api/event/:id', async(req,res) => {
+          const {id} = req.params
+          const query = {
+            _id: new ObjectId(id)
+          }
+          const m = req.body
+          const update = {
+            $set: m
+          }
+          const result = await eventsCollection.updateOne(query,update)
+          res.send(result)
+        })
+
+        app.delete('/api/event/:id', async(req,res) => {
+          const {id} = req.params
+          const filter = {
+            _id: new ObjectId(id)
+          }
+          const result = await eventsCollection.deleteOne(filter)
+          res.send(result)
           console.log(result)
         })
 

@@ -29,3 +29,10 @@ export const ServerSession = async() => {
     const user = session?.user
     return user || {}
 }
+
+export const deleteServer = async(path) => {
+    const res = await fetch(`${BasUrl}${path}`,{
+        method: 'DELETE'
+    })
+    return res.json()
+}
