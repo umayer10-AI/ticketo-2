@@ -1,11 +1,17 @@
 "use client";
 
+import { eventAddOrganization } from "@/lib/api/action";
+import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function OrganizationEvent() {
   const [open, setOpen] = useState(false);
+
+  const {data: session} = authClient.useSession()
+  const user = session?.user
+//   console.log(user)
 
   const {
     register,
@@ -42,6 +48,7 @@ export default function OrganizationEvent() {
       // ✅ FINAL EVENT DATA
       const eventData = {
         title: data.title,
+        organizationEmail: user?.email,
         date: data.date,
         location: data.location,
         price: data.price,
@@ -54,9 +61,12 @@ export default function OrganizationEvent() {
       console.log("FINAL EVENT:", eventData);
 
       // 👉 API CALL HERE
-      // await addEvent(eventData)
+      const addData = await eventAddOrganization(eventData)
 
-      toast.success("Event created successfully 🚀");
+      if(addData.insertedId){
+        toast.success("Event created successfully 🚀");
+      }
+
 
       reset();
       setOpen(false);

@@ -5,6 +5,9 @@ export const addOrganization = async(v) => {
 }
 
 export const updateOrganization = async(v,id) => {
-    // console.log(v,id)
     return postSerVer(`/api/organizaion/${id}`,v,'PATCH')
+}
+
+export const eventAddOrganization = async(v) => {
+    return postSerVer(`/api/event`,v,'POST')
 }

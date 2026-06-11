@@ -61,7 +61,6 @@ const run = async () => {
           }
           const result = await organizaionCollection.findOne(query)
           res.json({org:result})
-          
         })
 
         app.patch('/api/organizaion/:id', async(req,res) => {
@@ -78,7 +77,27 @@ const run = async () => {
             }
           }
           const result = await organizaionCollection.updateOne(filter,update)
-          console.log(result)
+          res.send(result)
+        })
+
+        app.post('/api/event', async (req,res) => {
+          const m = req.body
+          const newData = {
+            ...m,
+            createdAt: new Date(),
+            status: 'active'
+          }
+          const result = await eventsCollection.insertOne(newData)
+          res.send(result)
+        })
+
+        app.get('/api/event/:email', async(req,res) => {
+          const {email} = req.params
+          const query = {
+            organizationEmail: email,
+          }
+          const result = await eventsCollection.find(query).toArray()
+          res.json(result || {})
           console.log(result)
         })
 
