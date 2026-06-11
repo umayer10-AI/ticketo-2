@@ -17,6 +17,7 @@ export const postSerVer = async(path,v,method) => {
         },
         body: JSON.stringify(v)
     })
+    
     const data = await res.json()
     return data
 }

@@ -1,5 +1,6 @@
 'use client'
 import React from 'react';
+import UpdateProfileModal from './UpdateProfileModal';
 
 const FormSubmittedShowing = () => {
     return (
@@ -32,12 +33,15 @@ const FormSubmittedShowing = () => {
       application and get back to you if needed.
     </p>
 
-    <button
+    <div className='mt-6 flex justify-center gap-3'>
+        <button
       onClick={() => router.push("/")}
-      className="mt-6 px-6 py-3 bg-linear-to-r from-cyan-500 to-blue-700 text-white rounded-lg hover:bg-blue-700 transition"
+      className="bg-linear-to-r from-cyan-500 to-blue-600 px-5 py-2.5 font-medium rounded-xl hover:bg-blue-700 transition"
     >
       Back to Home
     </button>
+    <UpdateProfileModal></UpdateProfileModal>
+    </div>
   </div>
 </div>
         </div>

@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const port = 5000 || process.env.PORT
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors())
 app.use(express.json())
@@ -60,7 +60,26 @@ const run = async () => {
             email,
           }
           const result = await organizaionCollection.findOne(query)
-          res.send(result)
+          res.json({org:result})
+          
+        })
+
+        app.patch('/api/organizaion/:id', async(req,res) => {
+          const {id} = req.params
+          const filter = {
+            _id: new ObjectId(id)
+          }
+          const m = req.body
+          const update = {
+            $set: {
+              ...m,
+              createdAt: new Date(),
+              status: 'active'
+            }
+          }
+          const result = await organizaionCollection.updateOne(filter,update)
+          console.log(result)
+          console.log(result)
         })
 
         // await client.db("admin").command({ ping: 1 });

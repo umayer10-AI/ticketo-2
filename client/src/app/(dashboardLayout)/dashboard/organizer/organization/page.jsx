@@ -8,14 +8,14 @@ const page = async () => {
 
     const user = await ServerSession()
     const exist = await myOrganization(user?.email)
-    console.log(exist)
+    console.log(exist.org)
 
     let show;
-    if(!exist){
-        show = <OrganizerOrganization></OrganizerOrganization>
+    if(exist.org){
+        show = <FormSubmittedShowing></FormSubmittedShowing>
     }
     else{
-        show = <FormSubmittedShowing></FormSubmittedShowing>
+        show = <OrganizerOrganization></OrganizerOrganization>
     }
 
     return (
@@ -23,6 +23,7 @@ const page = async () => {
             <h2 className='text-3xl font-bold mb-10'>Hello Organization</h2>
             
             {show}
+            {/* <OrganizerOrganization></OrganizerOrganization> */}
         </div>
     );
 };
