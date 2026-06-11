@@ -48,8 +48,9 @@ export default function OrganizerOrganization() {
     console.log(organizationData);
 
     const d = await addOrganization(organizationData)
-    if(d){
-        toast.success('Successfully',
+    console.log(d)
+    if(d.insertedId){
+        toast.success('Organization profile Added',
             {
                 style: {
                 borderRadius: '10px',
