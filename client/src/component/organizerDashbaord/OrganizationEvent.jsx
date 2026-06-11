@@ -16,10 +16,45 @@ export default function OrganizationEvent() {
 
   const onSubmit = async (data) => {
     try {
-      console.log("EVENT DATA:", data);
+    //   console.log("EVENT DATA:", data);
 
-      // 👉 API call here
-      // await addEvent(data)
+      let imageUrl = "";
+
+      // ✅ IMAGE UPLOAD (IMGBB)
+      const file = data.image?.[0];
+
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const res = await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const result = await res.json();
+        imageUrl = result?.data?.display_url || "";
+      }
+
+      // ✅ FINAL EVENT DATA
+      const eventData = {
+        title: data.title,
+        date: data.date,
+        location: data.location,
+        price: data.price,
+        category: data.category,
+        seats: Number(data.seats),
+        description: data.description,
+        image: imageUrl,
+      };
+
+      console.log("FINAL EVENT:", eventData);
+
+      // 👉 API CALL HERE
+      // await addEvent(eventData)
 
       toast.success("Event created successfully 🚀");
 
@@ -61,27 +96,26 @@ export default function OrganizationEvent() {
 
             {/* Header */}
             <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold text-white">Create Event</h2>
+              <h2 className="text-2xl font-bold text-white">
+                Create Event
+              </h2>
               <p className="text-sm text-slate-400 mt-1">
                 Add new event for your organization
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
 
-              {/* Event Title */}
+              {/* Title */}
               <div>
-                <label className="text-sm text-slate-300 mb-2 block">
+                <label className="text-sm text-slate-300 mb-1 block">
                   Event Title
                 </label>
                 <input
                   type="text"
-                  placeholder="Tech Conference 2026"
-                  {...register("title", {
-                    required: "Title is required",
-                  })}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-500"
+                  {...register("title", { required: "Title is required" })}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
                 />
                 {errors.title && (
                   <p className="text-red-400 text-sm mt-1">
@@ -90,75 +124,110 @@ export default function OrganizationEvent() {
                 )}
               </div>
 
+              {/* Category */}
+              <div>
+                <label className="text-sm text-slate-300 mb-1 block">
+                  Category
+                </label>
+                <select
+                  {...register("category", {
+                    required: "Category is required",
+                  })}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
+                >
+                  <option value="">Select category</option>
+                  <option value="tech">Tech</option>
+                  <option value="business">Business</option>
+                  <option value="education">Education</option>
+                  <option value="music">Music</option>
+                  <option value="sports">Sports</option>
+                </select>
+                {errors.category && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.category.message}
+                  </p>
+                )}
+              </div>
+
               {/* Date */}
               <div>
-                <label className="text-sm text-slate-300 mb-2 block">
+                <label className="text-sm text-slate-300 mb-1 block">
                   Event Date
                 </label>
                 <input
                   type="date"
-                  {...register("date", {
-                    required: "Date is required",
-                  })}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white"
+                  {...register("date", { required: true })}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
                 />
               </div>
 
               {/* Location */}
               <div>
-                <label className="text-sm text-slate-300 mb-2 block">
+                <label className="text-sm text-slate-300 mb-1 block">
                   Location
                 </label>
                 <input
                   type="text"
-                  placeholder="Dhaka, Bangladesh"
                   {...register("location")}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
                 />
               </div>
 
               {/* Price */}
               <div>
-                <label className="text-sm text-slate-300 mb-2 block">
+                <label className="text-sm text-slate-300 mb-1 block">
                   Ticket Price
                 </label>
                 <input
                   type="number"
-                  placeholder="500"
-                  {...register("price", {
-                    required: "Price is required",
-                  })}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white"
+                  {...register("price", { required: true })}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
                 />
-                {errors.price && (
+              </div>
+
+              {/* Seats */}
+              <div>
+                <label className="text-sm text-slate-300 mb-1 block">
+                  Seats
+                </label>
+                <input
+                  type="number"
+                  placeholder="Total seats"
+                  {...register("seats", {
+                    required: "Seats is required",
+                    min: 1,
+                  })}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
+                />
+                {errors.seats && (
                   <p className="text-red-400 text-sm mt-1">
-                    {errors.price.message}
+                    {errors.seats.message}
                   </p>
                 )}
               </div>
 
               {/* Description */}
               <div>
-                <label className="text-sm text-slate-300 mb-2 block">
+                <label className="text-sm text-slate-300 mb-1 block">
                   Description
                 </label>
                 <textarea
-                  rows={3}
-                  placeholder="Event details..."
+                  rows={1}
                   {...register("description")}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white"
                 />
               </div>
 
               {/* Image */}
               <div>
                 <label className="text-sm text-slate-300 mb-2 block">
-                  Event Banner
+                  Event Image
                 </label>
                 <input
                   type="file"
+                  accept="image/*"
                   {...register("image")}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-1.5 text-white file:mr-3 file:rounded-lg file:border-0 file:bg-cyan-600 file:px-3 file:py-1 file:text-white"
                 />
               </div>
 
@@ -167,7 +236,7 @@ export default function OrganizationEvent() {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="flex-1 rounded-xl border border-slate-700 py-3 text-slate-300 hover:bg-slate-800 transition"
+                  className="flex-1 rounded-xl border border-slate-700 py-3 text-slate-300 hover:bg-slate-800"
                 >
                   Cancel
                 </button>
@@ -175,7 +244,7 @@ export default function OrganizationEvent() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 font-semibold text-white hover:opacity-90 transition"
+                  className="flex-1 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 text-white font-semibold hover:opacity-90"
                 >
                   {isSubmitting ? "Creating..." : "Create Event"}
                 </button>
