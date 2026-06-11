@@ -85,7 +85,7 @@ const run = async () => {
           const newData = {
             ...m,
             createdAt: new Date(),
-            status: 'active'
+            status: 'pending'
           }
           const result = await eventsCollection.insertOne(newData)
           res.send(result)
